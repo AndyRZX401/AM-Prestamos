@@ -1,0 +1,440 @@
+<UserControl x:Class="ElPretamita.Views.Sam.SamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000"
+             Background="Transparent"
+             Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <!-- Animaciones para el Modal/Overlay fluido -->
+        <Storyboard x:Key="FadeInModal">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ModalOverlay" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetName="ModalOverlay" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="ModalPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" From="0.8" To="1" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="ModalPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" From="0.8" To="1" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Key="FadeOutModal">
+            <DoubleAnimation Storyboard.TargetName="ModalOverlay" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="ModalPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" From="1" To="0.9" Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="ModalPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" From="1" To="0.9" Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ModalOverlay" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.2">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <!-- Estilo base de Botones en esta vista -->
+        <Style x:Key="ActionBtnStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3B82F6"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#60A5FA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo DataGrid Oscuro -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#2D2D3F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="#1E1E2E"/>
+            <Setter Property="AlternatingRowBackground" Value="#161622"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#3B82F6"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RiesgoDeMora}" Value="True">
+                    <Setter Property="Background" Value="#7F1D1D"/>
+                </DataTrigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#3B82F6"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2D2D3F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}" Background="Transparent">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Cabecera y botón de volver -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Button Width="40" Height="40" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="BtnVolver_Click">
+                    <TextBlock Text="←" FontSize="24" Foreground="#94A3B8" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"/>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="20">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#2D2D3F"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                
+                <TextBlock Text="Gestión de Préstamos SAM" Foreground="#06B6D4" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Style="{StaticResource ActionBtnStyle}" Content="Clientes" Background="#475569" Margin="0,0,10,0" Click="BtnInactivos_Click"/>
+                    <Button Style="{StaticResource ActionBtnStyle}" Content="Nuevo SAM" Click="BtnNuevoSam_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Tarjetas de Resumen -->
+            <Grid Grid.Row="1" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="#1E1E2E" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="Total Prestado" Foreground="#94A3B8" FontSize="12"/>
+                        <TextBlock x:Name="TxtResumenPrestado" Text="$0.00" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Background="#1E1E2E" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="Total Cobrado" Foreground="#94A3B8" FontSize="12"/>
+                        <TextBlock x:Name="TxtResumenCobrado" Text="$0.00" Foreground="#10B981" FontSize="20" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="4" Background="#1E1E2E" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="Préstamos Activos" Foreground="#94A3B8" FontSize="12"/>
+                        <TextBlock x:Name="TxtResumenActivos" Text="0" Foreground="#3B82F6" FontSize="20" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="6" Background="#1E1E2E" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="Préstamos Vencidos" Foreground="#94A3B8" FontSize="12"/>
+                        <TextBlock x:Name="TxtResumenVencidos" Text="0" Foreground="#EF4444" FontSize="20" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Área de Datos (Dos columnas: Lista y Detalles) -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/> <!-- Separador -->
+                    <ColumnDefinition Width="320"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Columna Izquierda: DataGrid y Buscador -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Border Grid.Row="0" Background="#1E1E2E" CornerRadius="8" Padding="10,5" Margin="0,0,0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔍" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="TxtBuscarCliente" Background="Transparent" Foreground="White" BorderThickness="0" Width="300" VerticalAlignment="Center" TextChanged="TxtBuscarCliente_TextChanged" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" Background="#1E1E2E" CornerRadius="10" ClipToBounds="True">
+                        <DataGrid x:Name="DgSams" SelectionChanged="DgSams_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente.Nombre}" Width="*"/>
+                                <DataGridTextColumn Header="Monto Prestado" Binding="{Binding MontoOriginal, StringFormat=C}" Width="110"/>
+                                <DataGridTextColumn Header="Cuota" Binding="{Binding CuotaSemanal, StringFormat=C}" Width="80"/>
+                                <DataGridTextColumn Header="Saldo" Binding="{Binding SaldoRestante, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Próx. Pago" Binding="{Binding FechaVencimientoSiguiente, StringFormat=dd/MM/yyyy}" Width="90"/>
+                                <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+
+                <!-- Columna Derecha: Panel de Detalles -->
+                <Border Grid.Column="2" Background="#161622" CornerRadius="10">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="15">
+                        <StackPanel x:Name="PanelDetalles" Visibility="Hidden">
+                            <TextBlock Text="Detalles del SAM" Foreground="#06B6D4" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+                            
+                            <!-- Tarjeta de Cliente -->
+                            <Border Background="#1E1E2E" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+                                <StackPanel>
+                                    <TextBlock Text="Cliente" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,5"/>
+                                    <TextBlock x:Name="TxtDetalleNombre" Text="---" Foreground="White" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tarjeta de Préstamo -->
+                            <Border Background="#1E1E2E" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Row="0" Grid.Column="0">
+                                        <TextBlock Text="Monto Prestado" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBlock x:Name="TxtDetalleMonto" Text="---" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="0" Grid.Column="1">
+                                        <TextBlock Text="Interés / Plazo" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBlock x:Name="TxtDetalleInteres" Text="---" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="2" Grid.Column="0">
+                                        <TextBlock Text="Total a Pagar" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBlock x:Name="TxtDetalleTotalPagar" Text="---" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="2" Grid.Column="1">
+                                        <TextBlock Text="Saldo Pendiente" Foreground="#94A3B8" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBlock x:Name="TxtDetalleSaldo" Text="$0.00" Foreground="#10B981" FontSize="16" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <Button x:Name="BtnAbonar" Style="{StaticResource ActionBtnStyle}" Content="Cobrar Cuota Semanal" Background="#10B981" Margin="0,0,0,25" Click="BtnAbonar_Click"/>
+
+                            <TextBlock Text="Historial de Pagos" Foreground="#06B6D4" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                            
+                            <!-- Tabla de Historial (Crece dinámicamente sin scroll propio) -->
+                            <Border Background="#1E1E2E" CornerRadius="8" ClipToBounds="True">
+                                <DataGrid x:Name="DgPagosHistorial" HeadersVisibility="None" RowHeight="35" FontSize="13" MinHeight="100" VerticalScrollBarVisibility="Disabled">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding FechaPago, StringFormat=dd/MM/yyyy}" Width="100"/>
+                                        <DataGridTextColumn Binding="{Binding MontoPagado, StringFormat=C}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- CAPA SUPERPUESTA (OVERLAY) PARA FORMULARIOS FLUÍDOS -->
+        <Grid x:Name="ModalOverlay" Background="#99000000" Visibility="Collapsed" Opacity="0">
+            <Border x:Name="ModalPanel" Background="#1E1E2E" CornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Padding="20" RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                </Border.RenderTransform>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+                </Border.Effect>
+                
+                <StackPanel>
+                    <TextBlock x:Name="TxtModalTitulo" Text="Registrar Nuevo SAM" Foreground="#06B6D4" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+                    
+                    <TextBlock Text="Buscar Cliente Existente (Opcional)" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="CmbBuscarCliente" Height="35" Margin="0,0,0,15" IsEditable="True" IsTextSearchEnabled="True" TextSearch.TextPath="Nombre" DisplayMemberPath="Nombre" SelectionChanged="CmbBuscarCliente_SelectionChanged" VerticalContentAlignment="Center" Padding="5,0"/>
+
+                    <TextBlock Text="Nombre del Cliente" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                    <TextBox x:Name="TxtFormNombre" Background="#161622" Foreground="White" BorderBrush="#2D2D3F" BorderThickness="1" Padding="10" Height="35" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Cédula" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                    <TextBox x:Name="TxtFormCedula" Background="#161622" Foreground="White" BorderBrush="#2D2D3F" BorderThickness="1" Padding="10" Height="35" Margin="0,0,0,15" LostFocus="TxtFormCedula_LostFocus" TextChanged="TxtFormCedula_TextChanged" MaxLength="13"/>
+                    
+                    <TextBlock Text="Teléfono" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                    <TextBox x:Name="TxtFormTelefono" Background="#161622" Foreground="White" BorderBrush="#2D2D3F" BorderThickness="1" Padding="10" Height="35" Margin="0,0,0,15" TextChanged="TxtFormTelefono_TextChanged" MaxLength="12"/>
+
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Monto a Prestar ($)" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                            <TextBox x:Name="TxtFormMonto" Background="#161622" Foreground="White" BorderBrush="#2D2D3F" BorderThickness="1" Padding="10" Height="35" TextChanged="TxtForm_TextChanged" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Semanas" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                            <TextBox x:Name="TxtFormSemanas" Background="#161622" Foreground="White" BorderBrush="#2D2D3F" BorderThickness="1" Padding="10" Height="35" TextChanged="TxtForm_TextChanged" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Text="Interés (%)" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                        <TextBox x:Name="TxtFormInteres" Background="#161622" Foreground="White" BorderBrush="#2D2D3F" BorderThickness="1" Padding="10" Height="35" TextChanged="TxtForm_TextChanged" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
+                    </StackPanel>
+
+                    <Border Background="#161622" CornerRadius="5" Padding="10" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock x:Name="TxtFormTotalCalc" Text="Total a Pagar: $0.00" Foreground="#10B981" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="TxtFormCuotaCalc" Text="Cuota Semanal: $0.00" Foreground="#3B82F6" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Cancelar" Background="#475569" Foreground="White" Padding="10" FontWeight="Bold" Cursor="Hand" BorderThickness="0" Click="BtnCerrarModal_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Grid.Column="2" Style="{StaticResource ActionBtnStyle}" Content="Guardar" Click="BtnGuardarSam_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
+        <!-- CAPA SUPERPUESTA PARA SAMS INACTIVOS -->
+        <Grid x:Name="ModalOverlayInactivos" Background="#99000000" Visibility="Collapsed" Opacity="0">
+            <Border x:Name="ModalPanelInactivos" Background="#1E1E2E" CornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Center" Width="800" Height="500" Padding="20" RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                </Border.RenderTransform>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+                </Border.Effect>
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,15">
+                        <TextBlock Text="Historial de Clientes" Foreground="#06B6D4" FontSize="20" FontWeight="Bold"/>
+                        <Button Content="✕" Background="Transparent" Foreground="#94A3B8" BorderThickness="0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right" Cursor="Hand" Click="BtnCerrarInactivos_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+
+                    <Border Grid.Row="1" Background="#1E1E2E" CornerRadius="8" Padding="10,5" Margin="0,0,0,15" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔍" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="TxtBuscarInactivo" Background="Transparent" Foreground="White" BorderThickness="0" Width="250" VerticalAlignment="Center" TextChanged="TxtBuscarInactivo_TextChanged" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Background="#161622" CornerRadius="8" ClipToBounds="True">
+                        <DataGrid x:Name="DgDirectorioClientes" HeadersVisibility="Column" RowHeight="40" MouseDoubleClick="DgDirectorioClientes_MouseDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="*"/>
+                                <DataGridTextColumn Header="Cédula" Binding="{Binding Cedula}" Width="150"/>
+                                <DataGridTextColumn Header="Teléfono" Binding="{Binding Telefono}" Width="150"/>
+                                <DataGridTemplateColumn Header="Acciones" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Ver Historial" Background="#06B6D4" Foreground="White" BorderThickness="0" Cursor="Hand" Padding="5" Click="BtnVerHistorial_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

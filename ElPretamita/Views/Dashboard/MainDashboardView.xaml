@@ -1,0 +1,209 @@
+<UserControl x:Class="ElPretamita.Views.Dashboard.MainDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000"
+             Background="#18181C">
+
+    <UserControl.Resources>
+        <!-- Estilo Base para las Tarjetas -->
+        <Style x:Key="DashboardCardStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="ContainerGrid" RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Grid.RenderTransform>
+                            
+                            <!-- Borde Principal Brillante -->
+                            <Border x:Name="OuterBorder" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderThickness="2" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    CornerRadius="25"
+                                    Margin="10">
+                                <Border.Effect>
+                                    <DropShadowEffect x:Name="GlowEffect" Color="{Binding BorderBrush.Color, RelativeSource={RelativeSource TemplatedParent}}" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                                </Border.Effect>
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            </Border>
+                        </Grid>
+                        
+                        <!-- Triggers para la fluidez (Hover) -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ContainerGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.03" Duration="0:0:0.2">
+                                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetName="ContainerGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.03" Duration="0:0:0.2">
+                                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetName="GlowEffect" Storyboard.TargetProperty="BlurRadius" To="35" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="GlowEffect" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ContainerGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="ContainerGrid" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="GlowEffect" Storyboard.TargetProperty="BlurRadius" To="15" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="GlowEffect" Storyboard.TargetProperty="Opacity" To="0.4" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Título -->
+            <RowDefinition Height="*"/>    <!-- Botones -->
+            <RowDefinition Height="Auto"/> <!-- Footer -->
+        </Grid.RowDefinitions>
+
+        <!-- Título Superior Dorado -->
+        <TextBlock Grid.Row="0" 
+                   Text="Selecciona una sección a gestionar" 
+                   Foreground="#C8A97E" 
+                   FontSize="26" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,50,0,10" 
+                   FontWeight="Light"/>
+
+        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="420"/>
+                <ColumnDefinition Width="40"/> <!-- Separación -->
+                <ColumnDefinition Width="420"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ===================== BOTÓN SAM ===================== -->
+            <Button Grid.Column="0" Style="{StaticResource DashboardCardStyle}" BorderBrush="#3B82F6" Click="BtnSam_Click">
+                <Button.Background>
+                    <RadialGradientBrush GradientOrigin="0.8,0.8" Center="0.5,0.5" RadiusX="0.8" RadiusY="0.8">
+                        <GradientStop Color="#1E3A8A" Offset="0"/> <!-- Azul profundo -->
+                        <GradientStop Color="#0F172A" Offset="1"/> <!-- Fondo muy oscuro -->
+                    </RadialGradientBrush>
+                </Button.Background>
+                <Grid>
+                    <!-- Decoración Cyber/Tecnológica Fondo -->
+                    <Path Data="M 350,50 L 350,150 L 320,180 L 320,250 M 370,80 L 370,120 L 390,140 L 390,300 M 50,300 L 150,300 L 180,270 L 250,270 M 80,320 L 120,320 L 140,340" 
+                          Stroke="#3B82F6" StrokeThickness="3" Opacity="0.3" Stretch="Fill" Margin="20"/>
+                    <Path Data="M 345,150 L 355,150 M 315,180 L 325,180 M 385,140 L 395,140" Stroke="#60A5FA" StrokeThickness="4" Opacity="0.6" Stretch="Fill" Margin="20"/>
+
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,30,0,0">
+                        <!-- Iconos de Usuario (Simulando el 3D con sombras múltiples) -->
+                        <Grid Width="200" Height="150" HorizontalAlignment="Center" Margin="0,0,0,20">
+                            <!-- Sombra base gruesa -->
+                            <Path Data="M 100,20 A 40,40 0 1,0 100,100 A 40,40 0 1,0 100,20 Z M 50,180 Q 50,120 100,120 Q 150,120 150,180 Z" 
+                                  Fill="#1E3A8A" Stretch="Uniform" Margin="10,10,-10,-10" Opacity="0.8" HorizontalAlignment="Left" Width="120"/>
+                            <!-- Icono principal -->
+                            <Path Data="M 100,20 A 40,40 0 1,0 100,100 A 40,40 0 1,0 100,20 Z M 50,180 Q 50,120 100,120 Q 150,120 150,180 Z" 
+                                  Fill="#3B82F6" Stretch="Uniform" HorizontalAlignment="Left" Width="120">
+                                <Path.Effect>
+                                    <DropShadowEffect Color="#60A5FA" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                                </Path.Effect>
+                            </Path>
+                            
+                            <!-- Icono secundario superpuesto (pequeño a la derecha) -->
+                            <Path Data="M 100,20 A 40,40 0 1,0 100,100 A 40,40 0 1,0 100,20 Z M 50,180 Q 50,120 100,120 Q 150,120 150,180 Z" 
+                                  Fill="#1E3A8A" Stretch="Uniform" Margin="90,60,-10,-10" Opacity="0.8" HorizontalAlignment="Right" Width="80"/>
+                            <Path Data="M 100,20 A 40,40 0 1,0 100,100 A 40,40 0 1,0 100,20 Z M 50,180 Q 50,120 100,120 Q 150,120 150,180 Z" 
+                                  Fill="#60A5FA" Stretch="Uniform" Margin="80,50,0,0" HorizontalAlignment="Right" Width="80"/>
+                        </Grid>
+
+                        <TextBlock Text="S. A. M." FontSize="45" FontWeight="Bold" Foreground="#60A5FA" HorizontalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#3B82F6" BlurRadius="10" ShadowDepth="0"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                        <TextBlock Text="Gestión de clientes de SAM" FontSize="18" Foreground="#93C5FD" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Button>
+
+            <!-- ===================== BOTÓN PRÉSTAMOS ===================== -->
+            <Button Grid.Column="2" Style="{StaticResource DashboardCardStyle}" BorderBrush="#10B981" Click="BtnPrestamos_Click">
+                <Button.Background>
+                    <RadialGradientBrush GradientOrigin="0.2,0.8" Center="0.5,0.5" RadiusX="0.8" RadiusY="0.8">
+                        <GradientStop Color="#064E3B" Offset="0"/> <!-- Verde profundo -->
+                        <GradientStop Color="#0F172A" Offset="1"/> <!-- Fondo muy oscuro -->
+                    </RadialGradientBrush>
+                </Button.Background>
+                <Grid>
+                    <!-- Decoración Cyber/Tecnológica Fondo -->
+                    <Path Data="M 50,50 L 50,150 L 80,180 L 80,250 M 30,80 L 30,120 L 10,140 L 10,300 M 350,300 L 250,300 L 220,270 L 150,270 M 320,320 L 280,320 L 260,340" 
+                          Stroke="#10B981" StrokeThickness="3" Opacity="0.3" Stretch="Fill" Margin="20"/>
+                    <Path Data="M 55,150 L 45,150 M 85,180 L 75,180 M 15,140 L 5,140" Stroke="#34D399" StrokeThickness="4" Opacity="0.6" Stretch="Fill" Margin="20"/>
+
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,30,0,0">
+                        <!-- Iconos de Dinero (Simulando 3D) -->
+                        <Grid Width="200" Height="150" HorizontalAlignment="Center" Margin="0,0,0,20">
+                            <!-- Bolsa principal (Sombra y color base) -->
+                            <Path Data="M 100,20 Q 80,10 60,30 Q 70,50 80,60 L 60,100 C 20,130 20,190 100,190 C 180,190 180,130 140,100 L 120,60 Q 130,50 140,30 Q 120,10 100,20 Z" 
+                                  Fill="#064E3B" Stretch="Uniform" Margin="30,10,-10,-10" Opacity="0.8"/>
+                            <Path Data="M 100,20 Q 80,10 60,30 Q 70,50 80,60 L 60,100 C 20,130 20,190 100,190 C 180,190 180,130 140,100 L 120,60 Q 130,50 140,30 Q 120,10 100,20 Z" 
+                                  Fill="#10B981" Stretch="Uniform" Margin="20,0,0,0">
+                                <Path.Effect>
+                                    <DropShadowEffect Color="#34D399" BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
+                                </Path.Effect>
+                            </Path>
+                            
+                            <!-- Símbolo de dólar dorado centrado -->
+                            <TextBlock Text="$" FontSize="70" FontWeight="Black" Foreground="#FBBF24" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,40,0,0">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#B45309" BlurRadius="5" ShadowDepth="2"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            
+                            <!-- Bolsita secundaria pequeña a la izquierda -->
+                            <Path Data="M 100,20 Q 80,10 60,30 Q 70,50 80,60 L 60,100 C 20,130 20,190 100,190 C 180,190 180,130 140,100 L 120,60 Q 130,50 140,30 Q 120,10 100,20 Z" 
+                                  Fill="#064E3B" Stretch="Uniform" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,20" Opacity="0.8"/>
+                            <Path Data="M 100,20 Q 80,10 60,30 Q 70,50 80,60 L 60,100 C 20,130 20,190 100,190 C 180,190 180,130 140,100 L 120,60 Q 130,50 140,30 Q 120,10 100,20 Z" 
+                                  Fill="#34D399" Stretch="Uniform" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-5,0,0,25"/>
+                        </Grid>
+
+                        <TextBlock Text="PRÉSTAMOS" FontSize="45" FontWeight="Bold" Foreground="#34D399" HorizontalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#10B981" BlurRadius="10" ShadowDepth="0"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                        <TextBlock Text="Gestión de préstamos y abonos" FontSize="18" Foreground="#6EE7B7" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </Grid>
+
+        <!-- Separador Inferior y Texto Footer -->
+        <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Margin="0,40,0,30" HorizontalAlignment="Center" Width="600">
+            <Rectangle Height="3">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="Transparent" Offset="0"/>
+                        <GradientStop Color="#FBBF24" Offset="0.5"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+                <Rectangle.Effect>
+                    <DropShadowEffect Color="#F59E0B" BlurRadius="10" ShadowDepth="0"/>
+                </Rectangle.Effect>
+            </Rectangle>
+            <TextBlock Text="Sistema de Préstamos" Foreground="#A1A1AA" FontSize="14" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+            <Button Content="🖼️ Cambiar Logo del Login" Foreground="#A1A1AA" Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalAlignment="Center" Margin="0,15,0,0" Click="BtnCambiarLogo_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

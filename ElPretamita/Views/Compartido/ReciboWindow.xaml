@@ -1,0 +1,155 @@
+<Window x:Class="ElPretamita.Views.Compartido.ReciboWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Recibo de Pago" Height="650" Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Border Background="#1E1E2E" CornerRadius="15" Padding="20">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Título / Arrastrar -->
+            <Grid Grid.Row="0" Margin="0,0,0,10" MouseLeftButtonDown="DragWindow" Background="Transparent">
+                <TextBlock Text="Comprobante de Pago" Foreground="#06B6D4" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" Foreground="#94A3B8" BorderThickness="0" FontSize="18" FontWeight="Bold" Cursor="Hand" Click="BtnCerrar_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Área Imprimible del Ticket -->
+            <Border x:Name="TicketImprimible" Grid.Row="1" Background="White" CornerRadius="5" Padding="15" Margin="0,10">
+                <StackPanel>
+                    <TextBlock Text="AM PRESTAMOS" FontSize="24" FontWeight="Black" HorizontalAlignment="Center" Foreground="Black" Margin="0,0,0,5"/>
+                    <TextBlock Text="Préstamos Personales" FontSize="14" HorizontalAlignment="Center" Foreground="#555555" Margin="0,0,0,15"/>
+                    
+                    <Line X1="0" Y1="0" X2="330" Y2="0" Stroke="Black" StrokeDashArray="2 2" StrokeThickness="1" Margin="0,0,0,10"/>
+                    
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="TICKET N°:" FontWeight="Bold" Foreground="Black"/>
+                        <TextBlock x:Name="TxtTicketNum" Grid.Column="1" Text="0001" HorizontalAlignment="Right" Foreground="Black"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="FECHA:" FontWeight="Bold" Foreground="Black"/>
+                        <TextBlock x:Name="TxtFecha" Grid.Column="1" Text="22/06/2026 13:00" HorizontalAlignment="Right" Foreground="Black"/>
+                    </Grid>
+
+                    <Line X1="0" Y1="0" X2="330" Y2="0" Stroke="Black" StrokeDashArray="2 2" StrokeThickness="1" Margin="0,5,0,10"/>
+
+                    <TextBlock Text="CLIENTE:" FontWeight="Bold" Foreground="Black"/>
+                    <TextBlock x:Name="TxtCliente" Text="Nombre del Cliente" Foreground="Black" Margin="0,0,0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="CONCEPTO:" FontWeight="Bold" Foreground="Black"/>
+                    <TextBlock Text="Pago de Cuota Semanal SAM" Foreground="Black" Margin="0,0,0,10"/>
+
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="SEMANA ACTUAL:" FontWeight="Bold" Foreground="Black"/>
+                        <TextBlock x:Name="TxtSemanaActual" Grid.Column="1" Text="1 de 10" HorizontalAlignment="Right" Foreground="Black"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="SEMANAS RESTANTES:" FontWeight="Bold" Foreground="Black"/>
+                        <TextBlock x:Name="TxtSemanasRestantes" Grid.Column="1" Text="9" HorizontalAlignment="Right" Foreground="Black"/>
+                    </Grid>
+
+                    <Line X1="0" Y1="0" X2="330" Y2="0" Stroke="Black" StrokeDashArray="2 2" StrokeThickness="1" Margin="0,5,0,10"/>
+
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="MONTO PAGADO:" FontWeight="Bold" FontSize="16" Foreground="Black"/>
+                        <TextBlock x:Name="TxtMontoPagado" Grid.Column="1" Text="$0.00" HorizontalAlignment="Right" FontWeight="Bold" FontSize="16" Foreground="Black"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="NUEVO SALDO:" FontWeight="Bold" FontSize="14" Foreground="#555555"/>
+                        <TextBlock x:Name="TxtSaldoRestante" Grid.Column="1" Text="$0.00" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#555555"/>
+                    </Grid>
+
+                    <TextBlock Text="¡GRACIAS POR SU PAGO!" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Foreground="Black" Margin="0,10,0,0"/>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Botones -->
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Cerrar" Background="#475569" Foreground="White" FontWeight="Bold" Padding="10" BorderThickness="0" Cursor="Hand" Click="BtnCerrar_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="8">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="btnBorder" Property="Background" Value="#64748B"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Grid.Column="2" Content="🖨️ Imprimir" Background="#10B981" Foreground="White" FontWeight="Bold" Padding="10" BorderThickness="0" Cursor="Hand" Click="BtnImprimir_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="8">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="btnBorder" Property="Background" Value="#34D399"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

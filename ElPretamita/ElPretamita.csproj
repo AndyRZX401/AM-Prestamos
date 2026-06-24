@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <AssemblyName>AM_Prestamos</AssemblyName>
+    <Version>1.0.0.0</Version>
+    <Authors>AM Prestamos Team</Authors>
+    <Company>AM Financial System</Company>
+    <Description>Sistema Integral de Gestión de Préstamos y SAM</Description>
+    <Product>AM Prestamos</Product>
+    <Copyright>Copyright © 2026 AM Prestamos</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\el logo personal.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+    <Folder Include="Styles\" />
+    <Folder Include="Services\" />
+    <Folder Include="Views\MainMenu\" />
+    <Folder Include="Views\Dashboard\" />
+    <Folder Include="Views\Prestamos\" />
+    <Folder Include="Views\Sam\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\el logo personal.png" />
+  </ItemGroup>
+
+</Project>

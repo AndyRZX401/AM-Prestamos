@@ -1,0 +1,111 @@
+<Window x:Class="ElPretamita.Views.Compartido.HistorialClienteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Historial del Cliente" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <!-- Estilo DataGrid Oscuro -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#2D2D3F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="#1E1E2E"/>
+            <Setter Property="AlternatingRowBackground" Value="#161622"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#10B981"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#10B981"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2D2D3F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}" Background="Transparent">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#1E1E2E" CornerRadius="15" Padding="20">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Cabecera -->
+            <Grid Grid.Row="0" Margin="0,0,0,10" MouseLeftButtonDown="DragWindow" Background="Transparent">
+                <TextBlock x:Name="TxtTitulo" Text="Historial de Préstamos" Foreground="#06B6D4" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" Foreground="#94A3B8" BorderThickness="0" FontSize="18" FontWeight="Bold" Cursor="Hand" Click="BtnCerrar_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <TextBlock Grid.Row="1" Text="Aquí se muestran todos los SAMs registrados para este cliente a lo largo del tiempo." Foreground="#94A3B8" Margin="0,0,0,15"/>
+
+            <!-- Tabla de Historial -->
+            <Border Grid.Row="2" Background="#161622" CornerRadius="8" ClipToBounds="True">
+                <DataGrid x:Name="DgHistorialSams">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Monto Original" Binding="{Binding MontoOriginal, StringFormat=C}" Width="130"/>
+                        <DataGridTextColumn Header="Interés (%)" Binding="{Binding InteresPorcentaje}" Width="90"/>
+                        <DataGridTextColumn Header="Cuota" Binding="{Binding CuotaSemanal, StringFormat=C}" Width="100"/>
+                        <DataGridTextColumn Header="Total a Pagar" Binding="{Binding TotalPagar, StringFormat=C}" Width="120"/>
+                        <DataGridTextColumn Header="Restante" Binding="{Binding SaldoRestante, StringFormat=C}" Width="120"/>
+                        <DataGridTextColumn Header="Inicio" Binding="{Binding FechaInicio, StringFormat=dd/MM/yyyy}" Width="100"/>
+                        <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
